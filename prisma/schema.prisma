@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["deno"]
+  output          = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model City {
+  id String @id
+
+  name   String
+  Cinema Cinema[]
+}
+
+model Company {
+  id String @id
+
+  name   String
+  Cinema Cinema[]
+}
+
+model Cinema {
+  id String @id
+
+  name     String
+  fullName String
+
+  company          Company            @relation(fields: [companyId], references: [id])
+  companyId        String
+  city             City               @relation(fields: [cityId], references: [id])
+  cityId           String
+  CinemaSubscriber CinemaSubscriber[]
+}
+
+model Movie {
+  id String @id
+
+  letterboxdId    String
+  name            String
+  releaseYear     Int
+  MovieSubscriber MovieSubscriber[]
+}
+
+model Subscriber {
+  id String @id
+
+  chatId           Int                @unique
+  MovieSubscriber  MovieSubscriber[]
+  CinemaSubscriber CinemaSubscriber[]
+}
+
+model MovieSubscriber {
+  id String @id
+
+  available Boolean
+  notified  Boolean
+
+  movie        Movie      @relation(fields: [movieId], references: [id])
+  movieId      String
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+  subscriberId String
+}
+
+model CinemaSubscriber {
+  id String @id
+
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+  subscriberId String
+  cinema       Cinema     @relation(fields: [cinemaId], references: [id])
+  cinemaId     String
+}

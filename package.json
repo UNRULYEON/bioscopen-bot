@@ -1,0 +1,18 @@
+{
+  "name": "bioscopen-bot",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node-telegram-bot-api": "^0.64.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
