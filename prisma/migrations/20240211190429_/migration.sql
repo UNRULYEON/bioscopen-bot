@@ -38,7 +38,7 @@ CREATE TABLE "Movie" (
 -- CreateTable
 CREATE TABLE "Subscriber" (
     "id" TEXT NOT NULL,
-    "chatId" TEXT NOT NULL,
+    "chatId" INTEGER NOT NULL,
 
     CONSTRAINT "Subscriber_pkey" PRIMARY KEY ("id")
 );
@@ -62,6 +62,9 @@ CREATE TABLE "CinemaSubscriber" (
 
     CONSTRAINT "CinemaSubscriber_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subscriber_chatId_key" ON "Subscriber"("chatId");
 
 -- AddForeignKey
 ALTER TABLE "Cinema" ADD CONSTRAINT "Cinema_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

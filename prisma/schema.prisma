@@ -2,9 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["deno"]
-  output          = "../generated/client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -42,37 +40,48 @@ model Cinema {
 model Movie {
   id String @id
 
-  letterboxdId    String
-  name            String
-  releaseYear     Int
+  letterboxdId String   @unique
+  name         String
+  releaseYear  Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
   MovieSubscriber MovieSubscriber[]
 }
 
 model Subscriber {
   id String @id
 
-  chatId           Int                @unique
+  chatId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   MovieSubscriber  MovieSubscriber[]
   CinemaSubscriber CinemaSubscriber[]
 }
 
 model MovieSubscriber {
-  id String @id
-
   available Boolean
   notified  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  movie        Movie      @relation(fields: [movieId], references: [id])
+  movie        Movie      @relation(fields: [movieId], references: [id], onDelete: Cascade)
   movieId      String
-  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
   subscriberId String
+
+  @@id([movieId, subscriberId])
 }
 
 model CinemaSubscriber {
-  id String @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
-  subscriberId String
-  cinema       Cinema     @relation(fields: [cinemaId], references: [id])
+  cinema       Cinema     @relation(fields: [cinemaId], references: [id], onDelete: Cascade)
   cinemaId     String
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+  subscriberId String
+
+  @@id([cinemaId, subscriberId])
 }

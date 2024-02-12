@@ -15,7 +15,7 @@ bot.setMyCommands([
     description: `Search for movies you'd like updates for`,
   },
   {
-    command: 'subscribe',
+    command: 'subscribed',
     description: `See and manage for which films you'll get an notification for`,
   },
   {
@@ -29,4 +29,6 @@ export const initialiseBot = () => {
   startBot();
   searchBot();
   cinemasBot();
+
+  console.log('🤖 Bot initialised');
 };

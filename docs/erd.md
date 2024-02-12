@@ -31,11 +31,17 @@ erDiagram
     string letterboxdId
     string name
     number releaseYear
+
+    datetime createdAt
+    datetime updatedAt
   }
 
   Subscriber {
     string id
     string chatId
+
+    datetime createdAt
+    datetime updatedAt
   }
 
   MovieSubscriber {
@@ -46,6 +52,9 @@ erDiagram
 
     string movieId
     string subscriberId
+
+    datetime createdAt
+    datetime updatedAt
   }
 
   CinemaSubscriber {
