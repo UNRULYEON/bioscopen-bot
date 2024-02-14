@@ -21,18 +21,19 @@ model Company {
   id String @id
 
   name   String
+  emoji  String
   Cinema Cinema[]
 }
 
 model Cinema {
   id String @id
 
-  name     String
-  fullName String
+  name       String
+  scrapeName String
 
-  company          Company            @relation(fields: [companyId], references: [id])
+  company          Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId        String
-  city             City               @relation(fields: [cityId], references: [id])
+  city             City               @relation(fields: [cityId], references: [id], onDelete: Cascade)
   cityId           String
   CinemaSubscriber CinemaSubscriber[]
 }

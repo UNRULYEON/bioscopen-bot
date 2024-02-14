@@ -1,39 +1,94 @@
+import db from '@/db';
 import { bot } from './index';
-import { cinamesGroupByCity } from '@/pathe/cinemas.ts';
 
 const cinemasBot = () => {
-  bot.onText(/\/cinemas/, (msg) => {
+  bot.onText(/\/cinemas/, async (msg) => {
     const chatId = msg.chat.id;
 
+    const companies = await db.company.findMany({
+      select: {
+        name: true,
+        emoji: true,
+        Cinema: {
+          select: {
+            name: true,
+            city: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const cinemasGroupedByCity = companies.reduce<
+      {
+        name: string;
+        emoji: string;
+        cities: { name: string; cinemas: { name: string }[] }[];
+      }[]
+    >((acc, company) => {
+      const newAcc = [...acc];
+
+      if (!acc.some((c) => c.name !== company.name))
+        newAcc.push({ name: company.name, emoji: company.emoji, cities: [] });
+
+      company.Cinema.forEach((cinema) => {
+        const city = newAcc
+          .find((c) => c.name === company.name)
+          ?.cities.find((c) => c.name === cinema.city.name);
+
+        if (city) {
+          city.cinemas.push({ name: cinema.name });
+        } else {
+          newAcc
+            .find((c) => c.name === company.name)
+            ?.cities.push({
+              name: cinema.city.name,
+              cinemas: [{ name: cinema.name }],
+            });
+        }
+      });
+
+      return newAcc;
+    }, []);
+
     bot
-      .sendMessage(chatId, `*🔔 Cinemas I can give you a heads-up for:*`, {
-        parse_mode: 'Markdown',
-      })
-      .then(() => {
-        bot
-          .sendMessage(
-            chatId,
-            `*🐔 Pathé Cinemas*
+      .sendMessage(
+        chatId,
+        `${cinemasGroupedByCity
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((company) => {
+            return `*${company.emoji} ${company.name}*
 
-${cinamesGroupByCity
-  .sort((a, b) => a.city.localeCompare(b.city))
+${company.cities
+  .sort((a, b) => a.name.localeCompare(b.name))
   .map((city) => {
-    return `*${city.city}*
-${city.cinemas.map((cinema) => `• ${cinema.fullName}`).join('\n')}`;
+    return `*${city.name}*
+${city.cinemas.map((cinema) => `• ${cinema.name}`).join('\n')}`;
   })
-  .join('\n\n')}`,
-            { parse_mode: 'MarkdownV2' }
-          )
-          // Put next message in then to ensure order of messages send
-          .then(() => {
-            bot.sendMessage(
-              chatId,
-              `*🎨 Kino Cinemas*
+  .join('\n\n')}
+`;
+          })}`,
+        { parse_mode: 'MarkdownV2' }
+      )
+      .catch((error) => console.error('cinemasBot', error))
+      // Put next message in .then() to ensure order of messages send
+      .then(() => {
+        bot.sendMessage(
+          chatId,
+          `*⬆️ Cinemas I can give you a heads-up for*
 
-_None yet_`,
-              { parse_mode: 'MarkdownV2' }
-            );
-          });
+To manage your preferences, use the following commands:
+\`/cinemas add schouwburgplein\`
+\`/cinemas remove de munt\`
+
+Changing your preferences will affect current and new movies you'll subscribe to.`,
+          {
+            parse_mode: 'Markdown',
+          }
+        );
       });
   });
 };

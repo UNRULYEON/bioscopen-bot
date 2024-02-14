@@ -15,12 +15,12 @@ bot.setMyCommands([
     description: `Search for movies you'd like updates for`,
   },
   {
-    command: 'subscribed',
-    description: `See and manage for which films you'll get an notification for`,
+    command: 'cinemas',
+    description: `See all cinemas I can give you a heads-up for`,
   },
   {
-    command: 'cinemas',
-    description: `Show all cinames I can give you a heads-up for`,
+    command: 'subscribed',
+    description: `See and manage for which films you'll get an notification for`,
   },
 ]);
 
