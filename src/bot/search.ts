@@ -100,7 +100,7 @@ const searchBot = () => {
           select: {
             cinema: {
               select: {
-                fullName: true,
+                name: true,
               },
             },
           },
@@ -113,6 +113,7 @@ const searchBot = () => {
         data: {
           id: crypto.randomUUID(),
           chatId: chatId,
+          wantsToBeNotified: true,
         },
         select: {
           id: true,
@@ -121,7 +122,7 @@ const searchBot = () => {
             select: {
               cinema: {
                 select: {
-                  fullName: true,
+                  name: true,
                 },
               },
             },
@@ -193,7 +194,7 @@ ${
 
 ${
   subscriber.CinemaSubscriber.length > 0
-    ? subscriber.CinemaSubscriber.map((c) => c.cinema.fullName).join('\n')
+    ? subscriber.CinemaSubscriber.map((c) => c.cinema.name).join('\n')
     : ''
 }`,
         {
