@@ -4,6 +4,7 @@ import startBot from './start';
 import stopBot from './stop';
 import searchBot from './search';
 import cinemasBot from './cinemas';
+import subBot from './sub';
 
 export const bot = new Bot(Bun.env.TELEGRAM_API_TOKEN, { polling: true });
 
@@ -20,7 +21,7 @@ bot.setMyCommands([
     description: `See all cinemas I can give you a heads-up for and manage your preferences`,
   },
   {
-    command: 'subscribed',
+    command: 'sub',
     description: `See and manage for which films you'll get an notification for`,
   },
 ]);
@@ -31,6 +32,7 @@ export const initialiseBot = () => {
   stopBot();
   searchBot();
   cinemasBot();
+  subBot();
 
   console.log('🤖 Bot initialised');
 };

@@ -47,12 +47,28 @@ const searchBot = () => {
         ? movie.poster.sizes[movie.poster.sizes.length - 1].url
         : undefined;
 
+    const alreadySubscribed = await db.movieSubscriber.findFirst({
+      where: {
+        subscriber: {
+          chatId: chatId,
+        },
+        movie: {
+          letterboxdId: movie.id,
+        },
+      },
+    });
+
     const inlineKeyboard: InlineKeyboardButton[][] = [
       [
-        {
-          text: '🔔 Subscribe',
-          callback_data: `search;subscribe;${movie.id};${movie.name};${movie.releaseYear}`,
-        },
+        alreadySubscribed
+          ? {
+              text: '🔕 Unsubscribe',
+              callback_data: `search;unsubscribe;${movie.id}`,
+            }
+          : {
+              text: '🔔 Subscribe',
+              callback_data: `search;subscribe;${movie.id};${movie.name};${movie.releaseYear}`,
+            },
       ],
     ];
 
