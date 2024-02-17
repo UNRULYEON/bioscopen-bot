@@ -16,7 +16,7 @@ bot.setMyCommands([
   },
   {
     command: 'cinemas',
-    description: `See all cinemas I can give you a heads-up for`,
+    description: `See all cinemas I can give you a heads-up for and manage your preferences`,
   },
   {
     command: 'subscribed',
