@@ -54,7 +54,7 @@ model Movie {
 model Subscriber {
   id String @id
 
-  chatId            Int      @unique
+  chatId            BigInt   @unique
   wantsToBeNotified Boolean
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

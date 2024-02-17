@@ -1,6 +1,7 @@
 import Bot from 'node-telegram-bot-api';
 import helpBot from './help';
 import startBot from './start';
+import stopBot from './stop';
 import searchBot from './search';
 import cinemasBot from './cinemas';
 
@@ -27,6 +28,7 @@ bot.setMyCommands([
 export const initialiseBot = () => {
   helpBot();
   startBot();
+  stopBot();
   searchBot();
   cinemasBot();
 

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Subscriber" ALTER COLUMN "chatId" SET DATA TYPE BIGINT;
